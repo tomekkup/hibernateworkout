@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.CollectionUtils;
 
 /**
  *
@@ -20,9 +21,12 @@ public class TableContentLogger {
     public static void list(String tableName, JdbcTemplate jdbcTemplate) {
         List<Map<String, Object>> list = jdbcTemplate.queryForList("SELECT * FROM " + tableName);
         logger.debug("-------------------------------------");
-        for (Map<String, Object> item : list) {
-            logger.debug(tableName + "> " + item.toString());
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Map<String, Object> item : list) {
+                logger.debug(tableName + "> " + item.toString());
+            }
+        } else {
+            logger.debug(tableName + "> empty");
         }
-        logger.debug("-------------------------------------");
     }
 }

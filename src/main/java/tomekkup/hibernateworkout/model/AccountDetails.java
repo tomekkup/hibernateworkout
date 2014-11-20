@@ -32,6 +32,10 @@ public class AccountDetails {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     @OneToOne(fetch= FetchType.LAZY)
     @PrimaryKeyJoinColumn
     public UserAccount getUserAccount() {

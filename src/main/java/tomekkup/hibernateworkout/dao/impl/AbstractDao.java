@@ -19,7 +19,7 @@ abstract class AbstractDao {
         this.sessionFactory = sessionFactory;
     }
     
-    protected Session getSession() {
+    protected final Session getSession() {
         return sessionFactory.getCurrentSession();
     }
     

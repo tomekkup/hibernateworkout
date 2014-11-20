@@ -57,7 +57,7 @@ public class UserAccount extends AbstractEntity {
         this.password = password;
     }
 
-    @OneToMany(mappedBy = "USERID", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     public List<Role> getRoles() {
         return roles;
     }

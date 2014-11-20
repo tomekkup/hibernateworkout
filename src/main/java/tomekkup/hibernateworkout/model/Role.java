@@ -16,7 +16,6 @@ public class Role extends AbstractEntity {
     private Byte priority;
     private Date validThru;
 
-    @Column(name="USERID")
     @ManyToOne
     public UserAccount getUser() {
         return user;

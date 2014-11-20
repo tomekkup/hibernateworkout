@@ -96,9 +96,12 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
     }
     
     @Rollback(false)
+    @Transactional
     @Test public void testI_saveOrUpdateOnExisting() {
+        info("Calling 'get'");
         UserAccount obj = userAccountDao.get(3);
         obj.setPassword("X7hj2!jg*");
+        info("Calling 'saveOrUpdate'");
         userAccountDao.saveOrUpdate(obj);
     }
     
