@@ -1,5 +1,7 @@
 # Poligon Spring + Hibernate
-Projekt ten stanowi w skrócie test JUnit-a działający w kontekście Spring-a, w którym z kolei pracuje Hibernate. Dane są przechowywane w bazie Apache Derby (in memory).
+blabla todo
+
+> Wersja DRAFT !
 
 Poszczególne testy zawarte pliku UserAccountTestExecutor po kolei prezentują jak działają mechanizmy dodawania, pobierania, cacheowania danych. Dowiesz się również jak mapujemy relacje blablabla
 
@@ -19,4 +21,4 @@ Java 6, Maven 2
 - JUnit: 4.11
 
 # FAQ
-> sdf
+> blabla
