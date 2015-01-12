@@ -24,10 +24,13 @@ import tomekkup.hibernateworkout.model.PermissionType;
 import tomekkup.hibernateworkout.model.Role;
 import tomekkup.hibernateworkout.model.RoleType;
 import tomekkup.hibernateworkout.model.UserAccount;
-
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+        
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) // aby odpalaly sie w kolejnosci jak napisany kod, wazne bo najpierw wstawianie potem ladowanie
-@org.springframework.test.context.ContextConfiguration("classpath:/context/applicationContext.xml")
+@ContextConfiguration("classpath:/context/applicationContext.xml")
+@TransactionConfiguration
 @Transactional(readOnly=true, propagation= Propagation.SUPPORTS)
 public class UserAccountTestExecutor extends AbstractTestExecutor {
     
@@ -56,6 +59,7 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
     };
     
     @Rollback(false)
+    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
     @Test public void testA_InsertNew() {
         userAccountDao.insertNew(1, "jan", "haslo1234");
         userAccountDao.insertNew(2, "zbigniew", "Zosia2007");
@@ -76,6 +80,7 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
     }
 
     @Rollback(false)
+    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
     @Test public void testD_Update() {
         userAccountDao.update(1, "mietek");
     }
@@ -86,28 +91,27 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
     }
     
     // test z PROPAGATION nie REQUIRED
-    @Rollback(false)
     @Test public void testF_UpdateRollbacked() {
-        userAccountDao.updateRollbacked(1, "kazik");
+        userAccountDao.update(1, "kazik");
     }
     
     @Test public void testG_TransRollbacked() {
         UserAccount modifiedUa = jdbcTemplate.queryForObject("SELECT * FROM USERACCOUNT WHERE ID = 1", new UserAccountRowMapper());
-        Assert.assertEquals("nie bylo rollback-u", "kazik", modifiedUa.getName());
+        Assert.assertEquals("nie bylo rollback-u", "mietek", modifiedUa.getName());
     }
     
     @Rollback(false)
+    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
     @Test public void testH_saveOrUpdateOnNew() {
         UserAccount obj = new UserAccount(4, "wladyslaw", "pipilangsztrung");
         userAccountDao.saveOrUpdate(obj);
     }
     
     @Rollback(false)
+    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
     @Test public void testI_saveOrUpdateOnExisting() {
-        info("Calling 'get'");
-        UserAccount obj = userAccountDao.get(3);
+        UserAccount obj = userAccountDao.load(3);
         obj.setPassword("X7hj2!jg*");
-        info("Calling 'saveOrUpdate'");
         userAccountDao.saveOrUpdate(obj);
     }
     
@@ -144,6 +148,7 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
     }
     
     @Rollback(false)
+    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
     @Test public void testN_addCollection() {
         UserAccount ua = new UserAccount(44, "albercik", "katakumba");
         Role role = new Role(RoleType.AUDITOR, new Byte("1"), new Date());
@@ -155,12 +160,15 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
         userAccountDao.saveOrUpdate(ua);
     }
     
+    @Transactional
     @Test public void testO_lazyLoading() {
         UserAccount ua = userAccountDao.get(44);
         info("Object retrieved from db. Now accessing collection item...");
         ua.getRoles().get(0);
     }
     
+    @Rollback(false)
+    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
     @Test public void testP_addCollectionBidirectional() {
         UserAccount ua = new UserAccount(44, "albercik", "katakumba");
         Permission perm = new Permission(PermissionType.CREATION);
@@ -174,8 +182,14 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
         List<Object> list = userAccountDao.createCachedQuery("From UserAccount", "user_accounts");
         info("results stored in 2L cache. Now executing next time");
         list = userAccountDao.createCachedQuery("From UserAccount", "user_accounts");
-        
-        //TODO evict. dodanie czegos i odczytanie - lub sam evict ! :)
-        
+    }
+    
+    @Rollback(false)
+    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
+    @Test public void testR_evictInCachedQuery() {
+        info("already cached in previous test...");
+        List<Object> list = userAccountDao.createCachedQuery("From UserAccount", "user_accounts");
+        userAccountDao.insertNew(32, "iwo", "skocz po piwo");
+        list = userAccountDao.createCachedQuery("From UserAccount", "user_accounts");
     }
 }

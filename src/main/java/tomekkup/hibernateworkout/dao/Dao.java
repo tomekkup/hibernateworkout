@@ -14,7 +14,11 @@ public interface Dao {
     
     void evict(Object obj);
     
+    <T extends Object> T merge(T obj);
+    
     Serializable save(Object obj);
+    
+    void saveOrUpdate(Object obj);
     
     void printCacheStats();
     

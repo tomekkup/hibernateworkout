@@ -15,10 +15,4 @@ public interface UserAccountDao extends Dao {
     UserAccount load(Integer id);
     
     void update(Integer id, String newUsername);
-    
-    void updateRollbacked(Integer id, String newUsername);
-    
-    void saveOrUpdate(UserAccount obj);
-    
-    void evict(UserAccount obj);
 }

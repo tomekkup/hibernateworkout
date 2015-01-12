@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package tomekkup.hibernateworkout.dao.impl;
 
 import java.io.Serializable;
@@ -13,9 +9,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.CacheMode;
 import org.hibernate.Query;
 import org.hibernate.stat.Statistics;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import tomekkup.hibernateworkout.dao.Dao;
 
 abstract class AbstractDao implements Dao {
@@ -37,13 +30,16 @@ abstract class AbstractDao implements Dao {
         getSession().evict(obj);
     }
     
-    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
     @Override
     public Serializable save(Object obj) {
         return getSession().save(obj);
     }
     
-    @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
+    @Override
+    public void saveOrUpdate(Object obj) {
+        getSession().saveOrUpdate(obj);
+    }
+    
     @Override
     public void persist(Object obj) {
         getSession().persist(obj);
@@ -65,5 +61,10 @@ abstract class AbstractDao implements Dao {
         query.setCacheMode(CacheMode.NORMAL);
         query.setCacheRegion(cacheRegion);
         return query.list();
+    }
+    
+    @Override
+    public <T extends Object> T merge(T obj) {
+        return (T) getSession().merge(obj);
     }
 }
