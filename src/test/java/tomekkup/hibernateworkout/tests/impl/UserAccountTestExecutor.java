@@ -1,5 +1,7 @@
 package tomekkup.hibernateworkout.tests.impl;
 
+import tomekkup.hibernateworkout.model.Permission;
+import java.util.Date;
 import tomekkup.hibernateworkout.tests.AbstractTestExecutor;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -17,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import tomekkup.hibernateworkout.dao.UserAccountDao;
 import tomekkup.hibernateworkout.dao.impl.UserAccountDaoImpl;
 import tomekkup.hibernateworkout.mappers.UserAccountRowMapper;
+import tomekkup.hibernateworkout.model.PermissionType;
+import tomekkup.hibernateworkout.model.Role;
+import tomekkup.hibernateworkout.model.RoleType;
 import tomekkup.hibernateworkout.model.UserAccount;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,6 +50,7 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
             printTableContent("USERACCOUNT");
             printTableContent("ROLES");
             printTableContent("ACCOUNT_DETAILS");
+            printTableContent("PERMISSIONS");
         }
     };
     
@@ -96,7 +102,6 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
     }
     
     @Rollback(false)
-    @Transactional
     @Test public void testI_saveOrUpdateOnExisting() {
         info("Calling 'get'");
         UserAccount obj = userAccountDao.get(3);
@@ -137,15 +142,36 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
         obj = userAccountDao.get(1);
     }
     
-    @Test public void testN_merge() {
-        
+    @Rollback(false)
+    @Test public void testN_addCollection() {
+        UserAccount ua = new UserAccount(44, "albercik", "katakumba");
+        Role role = new Role(RoleType.AUDITOR, new Byte("1"), new Date());
+        role.setId(10);
+
+        ua.getRoles().add(role);
+
+        userAccountDao.save(role);
+        userAccountDao.saveOrUpdate(ua);
     }
     
-    @Test public void testxxxN_persist() {
-        
+    @Test public void testO_lazyLoading() {
+        UserAccount ua = userAccountDao.get(44);
+        info("Object retrieved from db. Now accessing collection item...");
+        ua.getRoles().get(0);
     }
     
-    @Test public void testxxxxxO_lazyLoading() {
-        
+    @Test public void testP_addCollectionBidirectional() {
+        UserAccount ua = new UserAccount(44, "albercik", "katakumba");
+        Permission perm = new Permission(PermissionType.CREATION);
+        perm.setAccount(ua);
+        ua.getPermissions().add(perm);
+
+        userAccountDao.saveOrUpdate(ua);
+    }
+    
+    @Test public void testP_eagerLoading() {
+        UserAccount ua = userAccountDao.get(44);
+        info("Object retrieved from db. Now accessing collection item...");
+        ua.getPermissions().contains(new Object());
     }
 }

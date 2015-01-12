@@ -5,7 +5,9 @@
 package tomekkup.hibernateworkout.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -18,10 +20,12 @@ public class UserAccount extends AbstractEntity {
     
     private String name;
     private String password;
-    private List<Role> roles = new ArrayList<Role>();
     private AccountDetails details;
+    private List<Role> roles = new ArrayList<Role>();
+    private Set<Permission> permissions = new HashSet<Permission>();
     
     public UserAccount() {
+        super();
     }
 
     public UserAccount(Integer id, String name, String password) {
@@ -57,12 +61,22 @@ public class UserAccount extends AbstractEntity {
         this.password = password;
     }
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="USER_ID")
     public List<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.ALL, mappedBy="account")
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+    
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 }

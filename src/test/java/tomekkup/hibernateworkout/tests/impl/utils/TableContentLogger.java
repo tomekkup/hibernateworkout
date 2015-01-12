@@ -20,13 +20,13 @@ public class TableContentLogger {
     
     public static void list(String tableName, JdbcTemplate jdbcTemplate) {
         List<Map<String, Object>> list = jdbcTemplate.queryForList("SELECT * FROM " + tableName);
-        logger.debug("-------------------------------------");
         if (!CollectionUtils.isEmpty(list)) {
+            logger.debug("-------------------------------------");
             for (Map<String, Object> item : list) {
                 logger.debug(tableName + "> " + item.toString());
             }
         } else {
-            logger.debug(tableName + "> empty");
+            //logger.debug(tableName + "> empty");
         }
     }
 }

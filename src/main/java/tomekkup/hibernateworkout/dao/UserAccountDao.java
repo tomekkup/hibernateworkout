@@ -6,7 +6,7 @@ package tomekkup.hibernateworkout.dao;
 
 import tomekkup.hibernateworkout.model.UserAccount;
 
-public interface UserAccountDao {
+public interface UserAccountDao extends Dao {
     
     void insertNew(Integer id, String name, String password);
     

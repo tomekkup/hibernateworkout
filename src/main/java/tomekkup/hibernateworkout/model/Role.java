@@ -1,28 +1,25 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package tomekkup.hibernateworkout.model;
 
 import java.util.Date;
 import javax.persistence.*;
 
 @Entity
-@Table(name="ROLES")
+@Table(name="ROLES", uniqueConstraints={@UniqueConstraint(columnNames = {"TYPE", "PRIORITY"})})
 public class Role extends AbstractEntity {
     
-    private UserAccount user;
     private RoleType type;
     private Byte priority;
     private Date validThru;
 
-    @ManyToOne
-    public UserAccount getUser() {
-        return user;
+    public Role() {
+        super();
     }
 
-    public void setUser(UserAccount user) {
-        this.user = user;
+    public Role(RoleType type, Byte priority, Date validThru) {
+        this();
+        this.type = type;
+        this.priority = priority;
+        this.validThru = validThru;
     }
     
     @Enumerated(EnumType.STRING)
@@ -53,6 +50,4 @@ public class Role extends AbstractEntity {
     public void setType(RoleType type) {
         this.type = type;
     }
-    
-    
 }
