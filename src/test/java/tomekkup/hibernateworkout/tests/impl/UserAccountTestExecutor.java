@@ -2,6 +2,7 @@ package tomekkup.hibernateworkout.tests.impl;
 
 import tomekkup.hibernateworkout.model.Permission;
 import java.util.Date;
+import java.util.List;
 import tomekkup.hibernateworkout.tests.AbstractTestExecutor;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -169,9 +170,12 @@ public class UserAccountTestExecutor extends AbstractTestExecutor {
         userAccountDao.saveOrUpdate(ua);
     }
     
-    @Test public void testP_eagerLoading() {
-        UserAccount ua = userAccountDao.get(44);
-        info("Object retrieved from db. Now accessing collection item...");
-        ua.getPermissions().contains(new Object());
+    @Test public void testP_cachedQuery() {
+        List<Object> list = userAccountDao.createCachedQuery("From UserAccount", "user_accounts");
+        info("results stored in 2L cache. Now executing next time");
+        list = userAccountDao.createCachedQuery("From UserAccount", "user_accounts");
+        
+        //TODO evict. dodanie czegos i odczytanie - lub sam evict ! :)
+        
     }
 }

@@ -1,14 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package tomekkup.hibernateworkout.dao;
 
 import java.io.Serializable;
+import java.util.List;
+import org.hibernate.Query;
 
 /**
  *
- * @author tkuprowski
+ * @author Tomek Kuprowski
  */
 public interface Dao {
     
@@ -17,4 +15,8 @@ public interface Dao {
     void evict(Object obj);
     
     Serializable save(Object obj);
+    
+    void printCacheStats();
+    
+    List<Object> createCachedQuery(String queryStr, String cacheRegion);
 }

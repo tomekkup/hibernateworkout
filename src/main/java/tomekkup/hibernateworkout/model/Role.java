@@ -2,8 +2,12 @@ package tomekkup.hibernateworkout.model;
 
 import java.util.Date;
 import javax.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
+@Cacheable
+@Cache(region="roles", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name="ROLES", uniqueConstraints={@UniqueConstraint(columnNames = {"TYPE", "PRIORITY"})})
 public class Role extends AbstractEntity {
     

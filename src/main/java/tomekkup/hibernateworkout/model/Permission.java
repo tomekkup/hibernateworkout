@@ -1,9 +1,13 @@
 package tomekkup.hibernateworkout.model;
 
 import javax.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
 @Entity
+@Cacheable
+@Cache(region="permissions", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name="PERMISSIONS")
 public class Permission extends AbstractEntityWithAutoId {
     

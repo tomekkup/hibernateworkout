@@ -12,11 +12,19 @@
         <level value="DEBUG"/>
     </logger>
     
-    <logger name="org.springframework.orm.hibernate3">
+    <logger name="org.springframework.orm.hibernate4">
+        <level value="DEBUG"/>
+    </logger>
+    
+    <logger name="org.hibernate.cache">
         <level value="DEBUG"/>
     </logger>
     
     <logger name="tomekkup.hibernateworkout.tests.impl">
+        <level value="DEBUG"/>
+    </logger>
+    
+    <logger name="tomekkup.hibernateworkout.dao.impl">
         <level value="DEBUG"/>
     </logger>
     

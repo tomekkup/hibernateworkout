@@ -14,7 +14,6 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
     
-    <!--<aop:aspectj-autoproxy />-->
     <context:annotation-config/>
     <context:component-scan base-package="tomekkup.hibernateworkout"/>
     <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -25,7 +24,7 @@
         <value>tomekkup.hibernateworkout.model</value>
     </util:set>
     
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
           p:packagesToScan-ref="packagesToScan" p:dataSource-ref="datasource">
         <property name="hibernateProperties">
             <props>
@@ -33,25 +32,15 @@
                 <prop key="hibernate.max_fetch_depth">3</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.EJB3NamingStrategy</prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
+                <prop key="net.sf.ehcache.configurationResourceName">ehcache.xml</prop>
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.generate_statistics">true</prop>
             </props>
         </property>
     </bean>
     
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
           p:sessionFactory-ref="sessionFactory"/>
-       
-    <!--
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
-    
-    <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
-        <property name="transactionManager" ref="transactionManager"/>
-        <property name="transactionAttributeSource">
-            <bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
-        </property>
-    </bean>
-
-    <bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
-        <property name="transactionInterceptor" ref="transactionInterceptor"/>
-    </bean>
-    -->
 </beans>

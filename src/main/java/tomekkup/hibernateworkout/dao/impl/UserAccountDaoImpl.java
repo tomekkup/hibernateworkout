@@ -2,6 +2,7 @@ package tomekkup.hibernateworkout.dao.impl;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -55,6 +56,7 @@ public class UserAccountDaoImpl extends AbstractDao implements UserAccountDao {
         getSession().saveOrUpdate(obj);
     }
     
+    @Override
     public void evict(UserAccount obj) {
         super.evict(obj);
     }
